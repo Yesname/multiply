@@ -1,0 +1,105 @@
+.ssmt_half1, .ssmt_half2{
+            	position: absolute;
+            	left:0;
+            	top:0;
+            }
+            .ssmt_header {
+            	position: absolute;
+            	left:0;
+            	width:95%;
+            	height: 100%;
+            	text-align: left;
+            	min-height: 400px;
+            	z-index: 2;
+            }
+            .ssmt_header h1{
+            	font-size: 1.4rem;
+            	font-weight: 600;
+            	margin: 0 0 3rem;
+            }
+            .ssmt_header p{
+            	font-size: .8rem;
+            	line-height: 1.3rem
+            }
+            .ssmt_header .ssmt_stats{
+            	margin:2rem 0 0;
+            }
+            .ssmt_header .ssmt_stats p{
+            	font-size: .6rem;
+            	margin:0;
+            }
+            .ssmt_banner{
+            	position: absolute;
+            	top:0;
+            	left:-90%;
+            	width: 80%;
+            }
+            .ssmt_banner img {
+            	width:80%;
+            	margin: 0 0 0 10%;
+            }
+            .ssmt_table {
+            	position: absolute;
+            	width:100%;
+            	height: 100%;
+            }
+            .ssmt_table div {
+            	position: absolute;
+            	text-align: center;
+            	font-size: 1rem;
+            	display: flex;
+            	justify-content: center;
+            	align-items: center;
+            	z-index: 2;
+            	box-sizing: border-box;
+            }
+            .ssmt_table div:hover {
+            	border: 2px solid #000;
+            	z-index: 3;
+            }
+            .ssmt_table div .hint{
+            	position: absolute;
+            	background: rgba(0,0,40,.8);
+            	color: #fff;
+            	font-size: .7rem;
+            	width: 170px;
+            	height: 60px;
+            	display: none;
+            	top: -66px;
+            	left: -2px;
+            	text-align: left;
+            	pointer-events: none;
+            	box-shadow: 0 8px 30px rgba(0,0,40,.08);
+            	border-radius: 2px;
+            }
+            .ssmt_table div:hover .hint{
+            	display:flex;
+            }
+            .ssmt_example{
+            	position: absolute;
+            	font-size: 6rem;
+            	font-weight: 400;
+            	width: 100%;
+            	height: 100%;
+            	display: flex;
+            	justify-content: center;
+            	align-items: center;
+            	opacity: 0;
+            	z-index: 1;
+            }
+            .ssmt_credits{
+            	position: absolute;
+            	bottom: 0;
+            	font-size: .6rem;
+            }
+ 
+            .ssmt_numpad{
+            	display: block;
+            	position: absolute;
+            	top:-300px;
+            	width:1px;
+            	height:1px;
+            }
+            .ssmt_numpad, .ssmt_numpad:focus{
+            	font-size:160px;
+            }

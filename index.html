@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+        <meta charset="utf-8" />
+        <title>Таблица умножения</title>
+		<link rel="stylesheet" type="text/css" href="assets/ssmt.css">
+        <script src="assets/alive.js"></script>
+        <script src="assets/multiply.js"></script>
+        <style>
+            body, html {margin:0; width: 100%; height: 100%; font-family: -apple-system, Helvetica, sans-serif; overflow: hidden; background: #fcc}
+            .container {
+            	position: relative;
+            	width: 90%;
+            	height: 80%;
+            	margin: 10% 5%;
+            	background: #fff
+            }
+        </style>
+</head>
+
+<body>
+<div class = "container"></div>
+<script>
+
+
+var container = document.getElementsByClassName('container');
+var multiply = new CoreM(container[0],[
+	'assets/lvl0.png',
+	'assets/lvl1.png',
+	'assets/lvl2.png',
+	'assets/lvl3.png',
+	'assets/lvl4.png'
+	],function(data){console.log(data);});
+
+
+</script>
+</body>
+</html>
