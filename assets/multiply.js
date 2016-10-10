@@ -104,7 +104,7 @@ function CoreM(container,linkArray,saveFunction,loadString){
 	}
 
 	//Now adding all entrails
-	this.guts = '<div class = "ssmt_half1"><div class = "ssmt_header" style="opacity: 0"><div class = "ssmt_banner"></div><h1 class = "ssmt_headerh1">Это таблица умножения</h1><p class = "ssmt_headertext">Её нужно запомнить один раз — это сильно упростит жизнь, проблемы уйдут сами собой, а волосы станут мягкими и шелковистыми.</p><div class = "ssmt_stats"><p>Примеров решено: <span class = "ssmt_totalCount">0</span></p><p>Комбо без ошибок: <span class = "ssmt_combo">0</span></p><p>Среднее время на ответ: <span class = "ssmt_atime">0</span></p><p>Нелюбимый пример: <span class = "ssmt_worst">0</span></p></div><div class = "ssmt_credits">Версия 0.8</div></div></div><div class = "ssmt_half2"><div class = "ssmt_table"></div></div><div class = "ssmt_example">x × y = </div><input class="ssmt_numpad" type="tel">';
+	this.guts = '<div class = "ssmt_half1"><div class = "ssmt_header" style="opacity: 0"><div class = "ssmt_banner"></div><h1 class = "ssmt_headerh1">Это таблица умножения</h1><p class = "ssmt_headertext">Её нужно запомнить один раз — это сильно упростит жизнь, проблемы уйдут сами собой, а волосы станут мягкими и шелковистыми.</p><div class = "ssmt_stats"><p>Примеров решено: <span class = "ssmt_totalCount">0</span></p><p>Комбо без ошибок: <span class = "ssmt_combo">0</span></p><p>Среднее время на ответ: <span class = "ssmt_atime">0</span></p><p>Нелюбимый пример: <span class = "ssmt_worst">0</span></p></div></div></div><div class = "ssmt_half2"><div class = "ssmt_table"></div></div><div class = "ssmt_example">x × y = </div><input class="ssmt_numpad" type="tel">';
 	this.container.innerHTML = this.guts;
 
 	//Getting entrails as variables
