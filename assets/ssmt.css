@@ -87,6 +87,9 @@
             	opacity: 0;
             	z-index: 1;
             }
+            .ssmt_example span{
+                  color: #eee;
+            }
             .ssmt_credits{
             	position: absolute;
             	bottom: 0;
