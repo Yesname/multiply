@@ -28,16 +28,33 @@ function Resource(parent,link){
 };
 
 function Cell(parentDW,a,b,weight,timesShown,lastFired,lastTime){
-	//this.parent = parent;
 	this.a = a;
 	this.b = b;
 	this.c = a*b;
-	this.string = a+' ⋅ '+b+' = '; //⋅×
+	this.string = a+' ⋅ '+b+' = ';
+	this.stringA = ['',' ⋅ '+b+' = '+this.c];
+	this.stringB = [a+' ⋅ ',' = '+this.c];
 	this.weight = weight || parentDW;
 	this.timesShown = timesShown || 0;
 	this.lastFired = lastFired || false;
 	this.lastTime = lastTime || false;
 };
+Cell.prototype.startWatch = function(){
+	this.timesShown ++;
+	this.lastFired = Date.now();
+};
+Cell.prototype.stopWatch = function(){
+	this.lastTime = Date.now() - this.lastFired;
+};
+Cell.prototype.getString = function(type){
+	if (type == 1){
+		return this.stringA[0]+' &nbsp; '+this.stringA[1];
+	} else if (type == 2){
+		return this.stringB[0]+' &nbsp; '+this.stringB[1];
+	} else {
+		return this.string;
+	}
+}
 
 function CoreM(container,linkArray,saveFunction,loadString){
 	this.container = container;
@@ -51,36 +68,42 @@ function CoreM(container,linkArray,saveFunction,loadString){
 	this.grades = [
 			{
 				id : 0,
-				header : 'Это таблица умножения',
-				text : 'Её нужно запомнить один раз — это сильно упростит жизнь, проблемы уйдут сами собой, а волосы станут мягкими и шелковистыми.<br /> Нужно нажать энтер или ткнуть в экран, если в него можно тыкать.',
+				header : 'Пролог',
+				text : 'Это таблица умножения. Её нужно запомнить один раз — это сильно упростит жизнь, проблемы уйдут сами собой, а волосы станут мягкими и шелковистыми.<br /> Нужно нажать энтер или ткнуть в экран, если в него можно тыкать.',
 				image : false
 			},
 			{
 				id : 1,
-				header : 'Уже что-то',
-				text : 'Теперь нужно сделать так, чтобы таблица стала зеленой, возможны вкрапления золота.',
+				header : 'Часть I: Ученик',
+				text : 'Теперь нужно решать и решать, пока вся таблица не станет зеленой. Это будет означать, что на каждый пример был как минимум один верный ответ. Если клеточка станет золотой — ещё лучше, это значит, что с этим примером всё супер.',
 				image : false
 			},
 			{
 				id : 2,
-				header : 'Похоже, ты уже знаешь таблицу умножения',
-				text : 'Теперь нужно научиться считать очень быстро. Меньше трех секунд — хорошо, больше — плохо. Таблица должна стать золотой',
+				header : 'Часть II: Профи',
+				text : 'Пора стать лучше всех. Теперь результаты будут зависеть от времени. Меньше трех секунд на пример — хорошо, больше — плохо. А еще появятся хитрые примеры. Таблица должна стать золотой.',
 				image : false
 			},
 			{
 				id : 3,
-				header : 'Немногие знают таблицу умножения так, как ты',
-				text : 'Даже не знаю, что еще можно сказать. Это очень круто. Но есть кое-что еще.',
+				header : 'Эпилог',
+				text : 'Теперь ты совершенно точно знаешь таблицу умножения. Вообще немногие знают её так хорошо. Чтобы держать себя в форме, заходи сюда иногда. Максимум хитрых примеров. Очень мало времени. Всё такое. Еще пару заходов?',
 				image : false
 			}
 
 		];
 
 	this.mode = -1;
+
+	//Current example fired properties
 	this.currentExample = false;
+	this.currentType = false;
+	this.exampleIsReady = false;
+	this.correctString = false;
 	this.input = '';
-	this.totalCount = 10; //Number of examples per streak
+	this.totalCount = 10;
 	this.count = 0;
+
 	this.combo = 0;
 	this.defaultWeight = 100;
 	this.grade = 0;
@@ -257,6 +280,7 @@ CoreM.prototype.updateStats = function(){
 CoreM.prototype.updateGrade = function(){
 	var grade2 = true;
 	var grade3 = true;
+
 	for (let i=0;i<this.storage.length;i++){
 		if (this.storage[i].lastTime && this.storage[i].weight < this.defaultWeight){
 			if (this.grade == 0) this.grade = 1;
@@ -267,20 +291,16 @@ CoreM.prototype.updateGrade = function(){
 	};
 	if (this.grade==1 && grade2) this.grade = 2;
 	if (this.grade==2 && grade3) this.grade = 3;
-
-	
 	
 	this.nodes.h1.innerHTML = this.grades[this.grade].header;
 	this.nodes.text.innerHTML = this.grades[this.grade].text;
-	//this.nodes.banner.innerHTML = '';
-	//if (this.grades[this.grade].image) this.nodes.banner.appendChild(this.grades[this.grade].image);
 };
 CoreM.prototype.updateLayout = function(){
 	var hRatio = .5;
 	var vRatio = .6;
 	if (this.container.offsetWidth > this.container.offsetHeight){
 		var minSide = Math.min(this.container.offsetWidth * hRatio,this.container.offsetHeight);
-		this.nodes.half1.style.width = 100 - hRatio*100 + '%';
+		this.nodes.half1.style.width = 95 - hRatio*100 + '%';
 		this.nodes.half2.style.left = 100 - hRatio*100 + '%';
 		this.nodes.half1.style.top = this.nodes.half2.style.top = this.nodes.half1.style.left = '0';
 		this.nodes.half1.style.height = this.container.offsetHeight + 'px';
@@ -312,6 +332,7 @@ CoreM.prototype.switchMode = function(signal){
 		if (this.isMobile) this.nodes.numpad.blur();
 		this.updateStats();
 		if (this.currentExample){
+			this.currentExample = false;
 			this.exampleOut(this.stopHammerTime.bind(this));
 		} else {
 			this.stopHammerTime();
@@ -319,7 +340,6 @@ CoreM.prototype.switchMode = function(signal){
 		
 	} else if (this.mode != 1 && signal == 1){
 		this.nodes.header.style.marginLeft = '0px';
-		//this.nodes.banner.style.marginLeft = '0px';
 
 		alive.animate(this.nodes.banner,'margin-left','-100px',900,'CubeAccel');
 		alive.animate(this.nodes.header,'margin-left','-100px',900,'CubeAccel');
@@ -335,8 +355,6 @@ CoreM.prototype.switchMode = function(signal){
 };
 CoreM.prototype.stopHammerTime = function(){
 	this.nodes.header.style.marginLeft = '-100px';
-	//this.nodes.banner.style.marginLeft = '-100px';
-	//alive.animate(this.nodes.banner,'margin-left','0px',900,'CubeDecel');
 	alive.animate(this.nodes.header,'margin-left','0px',900,'CubeDecel');
 	alive.animate(this.nodes.header,'opacity',1,900);
 
@@ -364,9 +382,21 @@ CoreM.prototype.fireExample = function(){
 	this.input = '';
 	this.currentExample = cauldron[finger];
 	this.justFired = this.currentExample;
-	this.currentExample.timesShown ++;
-	this.currentExample.lastFired = Date.now();
-	this.nodes.example.innerHTML = this.currentExample.string;
+	this.currentExample.startWatch();
+
+	// EEEE XXXX PPPP EEEE RRRR IIII MMMM EEEE NNNN TTTT AAAA LLLL !!!!
+	if (this.grade >= 2){
+		var dice = Math.random();
+		var stops = this.grade == 2 ? [.8,.9] : [.3,.65]
+		this.currentType = dice < stops[0] ? 0 : dice < stops[1] ? 1 : 2;
+	} else {
+		this.currentType = 0;
+	}
+
+	this.nodes.example.innerHTML = this.currentExample.getString(this.currentType);
+	this.exampleIsReady = true;
+
+	this.correctString = this.currentType == 1 ? this.currentExample.a.toString() : this.currentType == 2 ? this.currentExample.b.toString() : this.currentExample.c.toString();
 
 	this.nodes.example.style.marginTop = '20px';
 	alive.animate(this.nodes.example,'opacity',1,1000,'CubeDecel');
@@ -381,40 +411,54 @@ CoreM.prototype.flash = function(isCorrect){
 		this.nodes.example.style.color = isCorrect ? 'rgb(115,169,68)' : 'rgb(225,9,50)';
 		alive.animate(this.nodes.example,'color','rgb(0,0,0)',600,'CubeDecel');
 	}
-CoreM.prototype.acceptKey = function(key){
-	var correct = this.currentExample.c.toString();
-	if (key in [1,2,3,4,5,6,7,8,9,0]){
+CoreM.prototype.acceptKey = function(key){	
+	if (key in [1,2,3,4,5,6,7,8,9,0] && this.exampleIsReady){
 		this.input += key;
-		this.nodes.example.innerHTML += key;
-	}
-	if (this.input.length == correct.length) {
-		this.currentExample.lastTime = Date.now() - this.currentExample.lastFired;
-		if (this.input == correct){ 	// GOOD
-			this.flash(true);
-			this.combo ++;
-			if (this.currentExample.lastTime <= this.goodTime){
-				this.currentExample.weight /= 2;
-				if (this.currentExample.lastTime <= this.goodTime / 2){
-					this.currentExample.weight -= 4;
-					if (this.currentExample.weight < 1) this.currentExample.weight = 1;
-				}
-			} else {
-				this.currentExample.weight += mapNumber(this.currentExample.lastTime,this.goodTime,this.goodTime*5,0,this.penalty);
-			}
-		} else {						// BAD
-			this.flash(false);
-			this.combo = 0;
-			this.currentExample.weight += this.penalty;		
-		};
-		this.save();
-		this.count ++;
-		if (this.count >= this.totalCount){
-			this.save(true);
-			this.switchMode(0);
+
+		if (this.currentType == 1){
+			this.nodes.example.innerHTML = this.currentExample.stringA[0]+this.input+this.currentExample.stringA[1];
+		} else if (this.currentType == 2){
+			this.nodes.example.innerHTML = this.currentExample.stringB[0]+this.input+this.currentExample.stringB[1];
 		} else {
-			this.exampleOut(this.fireExample);
+			this.nodes.example.innerHTML = this.currentExample.string + this.input;
+		}
+		if (this.input.length == this.correctString.length) {
+
+			this.currentExample.stopWatch();
+			this.exampleIsReady = false;
+
+			if (this.input == this.correctString){this.goodSequence();} 
+			else {this.badSequence();};
+			this.correctString = false;
+
+			this.save();
+			this.count ++;
+			if (this.count >= this.totalCount){
+				this.save(true);
+				this.switchMode(0);
+			} else {
+				this.exampleOut(this.fireExample);
+			}
 		}
 	}
+};
+CoreM.prototype.goodSequence = function(){
+	this.flash(true);
+	this.combo ++;
+	if (this.currentExample.lastTime <= this.goodTime || this.grade < 2){
+		this.currentExample.weight /= 2;
+		if (this.currentExample.lastTime <= this.goodTime / 2){
+			this.currentExample.weight -= 4;
+			if (this.currentExample.weight < 1) this.currentExample.weight = 1;
+		}
+	} else {
+		this.currentExample.weight += mapNumber(this.currentExample.lastTime,this.goodTime,this.goodTime*5,0,this.penalty);
+	}
+};
+CoreM.prototype.badSequence = function(){
+	this.flash(false);
+	this.combo = 0;
+	this.currentExample.weight += this.penalty;
 };
 CoreM.prototype.save = function(trueSave){
 	var saveObj = {
