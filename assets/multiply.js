@@ -34,6 +34,10 @@ function Cell(parentDW,a,b,weight,timesShown,lastFired,lastTime){
 	this.string = a+' ⋅ '+b+' = ';
 	this.stringA = ['',' ⋅ '+b+' = '+this.c];
 	this.stringB = [a+' ⋅ ',' = '+this.c];
+	this.stringR = b+' ⋅ '+a+' = ';
+	this.correctString = this.c.toString();
+	this.correctStringA = this.a.toString();
+	this.correctStringB = this.b.toString();
 	this.weight = weight || parentDW;
 	this.timesShown = timesShown || 0;
 	this.lastFired = lastFired || false;
@@ -54,7 +58,10 @@ Cell.prototype.getString = function(type){
 	} else {
 		return this.string;
 	}
-}
+};
+Cell.prototype.getCorrectString = function(type){
+	return type == 1 ? this.correctStringA : type == 2 ? this.correctStringB : this.correctString;
+};
 
 function CoreM(container,linkArray,saveFunction,loadString){
 	this.container = container;
@@ -396,7 +403,7 @@ CoreM.prototype.fireExample = function(){
 	this.nodes.example.innerHTML = this.currentExample.getString(this.currentType);
 	this.exampleIsReady = true;
 
-	this.correctString = this.currentType == 1 ? this.currentExample.a.toString() : this.currentType == 2 ? this.currentExample.b.toString() : this.currentExample.c.toString();
+	this.correctString = this.currentExample.getCorrectString(this.currentType);
 
 	this.nodes.example.style.marginTop = '20px';
 	alive.animate(this.nodes.example,'opacity',1,1000,'CubeDecel');
