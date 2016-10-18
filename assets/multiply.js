@@ -134,7 +134,7 @@ function CoreM(container,linkArray,saveFunction,loadString){
 	}
 
 	//Now adding all entrails
-	this.guts = '<div class = "ssmt_half1"><div class = "ssmt_header" style="opacity: 0"><div class = "ssmt_banner"></div><h1 class = "ssmt_headerh1">Это таблица умножения</h1><p class = "ssmt_headertext">Её нужно запомнить один раз — это сильно упростит жизнь, проблемы уйдут сами собой, а волосы станут мягкими и шелковистыми.</p><div class = "ssmt_stats"><p>Примеров решено: <span class = "ssmt_totalCount">0</span></p><p>Комбо без ошибок: <span class = "ssmt_combo">0</span></p><p>Среднее время на ответ: <span class = "ssmt_atime">0</span></p><p>Нелюбимый пример: <span class = "ssmt_worst">0</span></p></div></div></div><div class = "ssmt_half2"><div class = "ssmt_table"></div></div><div class = "ssmt_example">x × y = </div><input class="ssmt_numpad" type="tel">';
+	this.guts = '<div class = "ssmt_half1"><div class = "ssmt_header" style="opacity: 0"><h1 class = "ssmt_headerh1">Это таблица умножения</h1><p class = "ssmt_headertext">Её нужно запомнить один раз — это сильно упростит жизнь, проблемы уйдут сами собой, а волосы станут мягкими и шелковистыми.</p><div class = "ssmt_stats"><p>Примеров решено: <span class = "ssmt_totalCount">0</span></p><p>Комбо без ошибок: <span class = "ssmt_combo">0</span></p><p>Среднее время на ответ: <span class = "ssmt_atime">0</span></p><p>Нелюбимый пример: <span class = "ssmt_worst">0</span></p></div></div></div><div class = "ssmt_half2"><div class = "ssmt_table"></div></div><div class = "ssmt_example">x × y = </div><input class="ssmt_numpad" type="tel">';
 	this.container.innerHTML = this.guts;
 
 	//Getting entrails as variables
@@ -153,7 +153,6 @@ function CoreM(container,linkArray,saveFunction,loadString){
 
 	this.nodes.h1 = document.getElementsByClassName('ssmt_headerh1')[0];
 	this.nodes.text = document.getElementsByClassName('ssmt_headertext')[0];
-	//this.nodes.banner = document.getElementsByClassName('ssmt_banner')[0];
 
 	//Setting up event listeners
 	var shitcodeThis = this;
@@ -197,9 +196,9 @@ function CoreM(container,linkArray,saveFunction,loadString){
 };
 CoreM.prototype.checkIfReady = function(){
 	if (this.resourcesLoaded >= this.resources.length){
-		for (let i=0;i<this.grades.length;i++){
-			this.grades[i].image = this.resources[i].img
-		}
+	//	for (let i=0;i<this.grades.length;i++){
+	//		this.grades[i].image = this.resources[i].img
+	//	}
 		this.isReady = true;
 		console.log('All resources are ready');
 
@@ -348,7 +347,6 @@ CoreM.prototype.switchMode = function(signal){
 	} else if (this.mode != 1 && signal == 1){
 		this.nodes.header.style.marginLeft = '0px';
 
-		alive.animate(this.nodes.banner,'margin-left','-100px',900,'CubeAccel');
 		alive.animate(this.nodes.header,'margin-left','-100px',900,'CubeAccel');
 
 		var shitcodeThis = this;

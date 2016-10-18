@@ -28,16 +28,6 @@
             	font-size: .6rem;
             	margin:0;
             }
-            .ssmt_banner{
-            	position: absolute;
-            	top:0;
-            	left:-90%;
-            	width: 80%;
-            }
-            .ssmt_banner img {
-            	width:80%;
-            	margin: 0 0 0 10%;
-            }
             .ssmt_table {
             	position: absolute;
             	width:100%;
