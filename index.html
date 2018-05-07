@@ -54,7 +54,7 @@
             	font-weight: 500;
             	transform-origin: center;
             	transform: scale(0);
-            	transition: transform .4s ease, background 1s ease;
+            	transition: transform .4s ease;
             	cursor: default;
             }
             .cellhint {
@@ -87,7 +87,6 @@
             	font-weight: 500;
             	margin: 2rem 0 2rem 0;
             	transform: translate(0, -2rem);
-            	transform-origin: -20% 0%;
             	opacity: 0;
             	transition: transform .4s ease, opacity .4s ease;
             }
@@ -128,31 +127,37 @@
             	transition: width .4s .8s ease-in;
             	background: #4E8FFF;
             }
+            @keyframes pulse {
+            	0% {transform: scale(.9)}
+            	20% {transform: scale(1.1)}
+            	100% {transform: scale(.9)}
+            }
             .button {
             	display: inline-block;
             	position: fixed;
-            	bottom: 5%;
-            	left: calc(50% - 5rem);
-            	color: #FFF;
-            	font-weight: 700;
-            	letter-spacing: .04rem;
-            	background: #000;
-            	border-radius: 4rem 4rem;
-            	padding: 1rem 3rem;
+            	width: 4rem;
+            	height: 4rem;
+            	bottom: 5vh;
+            	right: 5vh;
+            	background: #000 url(assets/gogogo.svg) no-repeat;
+            	background-position: 50%;
+            	border-radius: 50%;
             	cursor: pointer;
             	transform: translate(0, 2rem);
             	opacity: 0;
             	transition: transform .4s .2s ease, opacity .4s .2s ease;
+            	animation: pulse 1.6s infinite;
             }
             .button:hover {
-            	background: #222;
-            	/*transform: scale(1.02);*/
-            	transition: transform .1s;
+            	background: #222 url(assets/gogogo.svg) no-repeat;
+            	background-position: 50%;
+            	animation: none;
+            	transform: scale(1.2) !important;
             }
             .button .hint{
             	position: absolute;
-            	margin-top: -1.3rem;
-            	right: calc(-57px - 1rem);
+            	margin-top: 20px;
+            	left: calc(-57px - 1rem);
             	width: 57px;
             	height: 29px;
             	background: url(assets/enter.svg);
@@ -431,7 +436,12 @@ class Core {
 			{name: 'Зад. Рот.', description: 'Решить десять тысяч примеров', unlocked: false, check: function(){return this.total >= 10000 ? true : false}.bind(this), source: 'p04.png'},
 			{name: 'Комбо', description: 'Решить 100 примеров подряд без ошибок', unlocked: false, check: function(){return this.combo >= 100 ? true : false}.bind(this), source: 'p05.png'},
 			{name: 'Суперкомбо', description: 'Решить 250 примеров подряд без ошибок.', unlocked: false, check: function(){return this.combo >= 250 ? true : false}.bind(this), source: 'p04.png'},
-			{name: 'Мегатурбокомбо', description: 'Решить 500 примеров подряд без ошибок.', unlocked: false, check: function(){return this.combo >= 500 ? true : false}.bind(this), source: 'p04.png'}
+			{name: 'Мегатурбокомбо', description: 'Решить 500 примеров подряд без ошибок.', unlocked: false, check: function(){return this.combo >= 500 ? true : false}.bind(this), source: 'p04.png'},
+			{name: 'Гепард', description: 'Решать примеры быстрее чем за 2 секунды', unlocked: false, check: function(){return this.average != 0 && this.average <= 2000 ? true : false}.bind(this), source: 'p04.png'},
+			{name: 'Всё лень', description: 'Тупить 5 минут, не запуская игру', unlocked: false, check: function(){return false}.bind(this), source: 'p05.png'},
+			{name: 'Лайк э босс!', description: 'Запустить игру энтером 10 раз', unlocked: false, check: function(){return this.enterCombo >= 10 ? true : false}.bind(this), source: 'p04.png'},
+			{name: 'Молния', description: 'Решить пример верно менее чем за полсекунды', unlocked: false, check: function(){return false}.bind(this), source: 'p04.png'},
+			{name: 'Так себе ачивка', description: 'Ошибиться десять раз подряд', unlocked: false, check: function(){return this.falseCombo >= 10 ? true : false}.bind(this), source: 'p04.png'}
 		];
 
 		this.mode = false;
@@ -439,8 +449,11 @@ class Core {
 		this.combo = 0;
 		this.total = 0;
 		this.progressFraction = 0;
+		this.enterCombo = 0;
+		this.falseCombo = 0;
 
-		this.mainSet = [[255,255,242,255],[218,255,199,255],[106,233,164,255],[35,213,233,255]];
+		// this.mainSet = [[255,255,242,255],[218,255,199,255],[106,233,164,255],[35,213,233,255]];
+		this.mainSet = [[194,255,255,1],[95,208,221,1],[134,100,219,1]]
 		
 		this.zeroCurrent();
 		this.loadProgress();
@@ -459,7 +472,7 @@ class Core {
 		this.help = document.createElement('div');
 		this.help.classList.add('help');
 		if (this.helpShown && !this.helpClosed) this.closeHelp();
-		this.help.innerHTML = '<h1>01</h1><p>Это таблица умножения. Её нужно запомнить один раз — это сильно упростит жизнь, проблемы уйдут сами собой, а волосы станут мягкими и шелковистыми.</p><p>Лучший способо запомнить — решать задачи. Когда на экране появится что-то вроде <b>5 ⋅ 2 =</b>, просто введи на клавиатуре ответ <b>10</b>.</p><p>Жми «Погнали» внизу экрана, как только соберешься с духом.</p>';
+		this.help.innerHTML = '<h1>01</h1><p>Это таблица умножения. Её нужно запомнить один раз — это сильно упростит жизнь, проблемы уйдут сами собой, а волосы станут мягкими и шелковистыми.</p><p>Лучший способо запомнить — решать задачи. Когда на экране появится что-то вроде <b>5 ⋅ 2 =</b>, просто введи на клавиатуре ответ <b>10</b>.</p><p>Жми enter или бесячую стрелку в правом нижнем углу экрана, как только соберешься с духом.</p>';
 		let closeButton = document.createElement('div');
 		closeButton.classList.add('closehelp');
 		closeButton.innerHTML = 'Всё ясно!<div class="hint"></div>';
@@ -523,6 +536,7 @@ class Core {
 		});
 		window.addEventListener('keypress', (e) => {
 			if (this.mode === 'lobby' && e.keyCode === 13){
+				this.enterCombo++;
 				this.switchMode('game');
 			} else if (e.keyCode >= 48 && e.keyCode <= 57 && this.ready) {
 				this.acceptDigit(e.keyCode - 48);
@@ -561,6 +575,10 @@ class Core {
 
 			if (this.currentAnswer === this.currentProblem.answers[this.variant]){
 
+				//Lightning baje & falseCombo
+				if (time <= 500) this.prizes[12].unlocked = true;
+				this.falseCombo = 0;
+
 				this.currentProblem.stats.corrects++;
 
 				this.currentProblem.weight *= .5;
@@ -578,6 +596,7 @@ class Core {
 
 			} else {
 
+				this.falseCombo++;
 				this.currentProblem.weight += 20;
 				if (this.currentProblem.trail) this.currentProblem.trail.weight += 5;
 				this.combo = 0;
@@ -620,11 +639,21 @@ class Core {
 			this.mode = 'lobby';
 			this.zeroCurrent();
 
+			//5 MIN
+			this.idleTimer = setTimeout(()=>{
+				console.log('HEEEY');
+				this.prizes[10].unlocked = true;
+				this.updatePrizes();
+				this.saveProgress();
+			},300000);
+
 		} else if (mode === 'game' && this.mode !== 'game'){
 
 			this.dissolveLobby();
 			this.mode = 'game';
 			this.throwProblem();
+
+			clearTimeout(this.idleTimer);
 
 		}
 
@@ -804,7 +833,7 @@ class Core {
 		this.statLine.classList.add('statline');
 		this.button = document.createElement('div');
 		this.button.classList.add('button');
-		this.button.innerHTML = 'Погнали!';
+		// this.button.innerHTML = 'Погнали!';
 		this.hint = document.createElement('div');
 		this.hint.classList.add('hint');
 
@@ -879,19 +908,19 @@ class Core {
 	updateBlah(){
 
 		this.total = 0;
-		let average = 0;
+		this.average = 0;
 		let notZero = 0;
 		for (let i = 0; i < this.problems.length; i++){
 			this.total += this.problems[i].stats.times;
-			average += this.problems[i].stats.averageTime;
+			this.average += this.problems[i].stats.averageTime;
 			notZero += this.problems[i].stats.averageTime === 0 ? 0 : 1;
 		}
-		average /= notZero === 0 ? 1 : notZero;
+		this.average /= notZero === 0 ? 1 : notZero;
 
 		this.header.innerHTML = this.level.header;
 		this.statCombo.innerHTML = this.combo;
 		this.statTotal.innerHTML = this.total;
-		this.statAverage.innerHTML = Math.round(average / 100) / 10 + ' с';
+		this.statAverage.innerHTML = Math.round(this.average / 100) / 10 + ' с';
 		this.progress.style.width = this.subprogress.style.width = this.progressFraction * 100 + '%';
 
 		this.checkPrizes();
@@ -1003,7 +1032,7 @@ class Core {
 
 		if (this.blah) {
 
-			let padding = Math.floor((this.gridWrap.clientHeight * .8 - square) / 2 + square / 9);
+			let padding = Math.floor((this.gridWrap.clientHeight * .8 - square) / 2);
 			this.blah.style.paddingTop = padding + 'px';
 
 		}
