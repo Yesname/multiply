@@ -1,0 +1,475 @@
+body, html {margin:0; width: 100%; height: 100%; font-family: 'TT Norms', Helvetica, sans-serif; font-size: 1vw; }
+            .name {
+            	position: absolute;
+            	top:0;
+            	left: 0;
+            	display: flex;
+            	font-size: .8rem;
+            	font-weight: 700;
+            	margin: 1rem 0 0 0;
+            	width: 100%;
+            	justify-content: center;
+            	color: rgba(0,0,0,.3);
+            	pointer-events: none;
+            }
+            .cellar {
+            	position: fixed;
+            	left:0;
+            	bottom:0;
+            	margin: 0 0 1rem 1rem;
+            	font-size: .8rem;
+            	font-weight: 400;
+            	color: rgba(0,0,0,.3);
+            }
+            .cellar a {
+            	margin-left: 1rem;
+            	color: rgba(0,0,0,.3);
+            }
+            .vessel {
+            	position: absolute;
+            	margin: 0;
+            	padding: 0;
+            	top: 0;
+            	left: 0;
+            	background: #FFF;
+            	width: 100%;
+            	height: 100%;
+            	transition: background 2s;
+            }
+            .grid {
+            	position: relative;
+            	/*background: #c33;*/
+            }
+            /*.grid:hover .cell {
+            	opacity: .6;
+            }*/
+            .gridWrap {
+            	position: fixed;
+            	display: flex;
+            	/*background: rgba(0,0,255,.1);*/
+            }
+            .cell {
+            	position: absolute;
+            	display: flex;
+            	justify-content: center;
+            	align-items: center;
+            	width: calc(100% / 9 - 2px);
+            	height: calc(100% / 9 - 2px);
+            	border-radius: 4px;
+            	font-size: 1.5rem;
+            	font-weight: 500;
+            	transform-origin: center;
+            	transform: scale(0);
+            	transition: transform .4s ease, background-color 2s;
+            	cursor: default;
+            }
+            .cellhint {
+            	position: absolute;
+            	left: 0;
+            	top: 0;
+            	background: rgba(0,0,0,.8);
+            	border-radius: .2rem;
+            	color: #FFF;
+            	font-size: 1rem;
+            	padding: 1rem;
+            	pointer-events: none;
+            	opacity: 0;
+            	margin-top: -60%;
+            	transition: opacity .2s ease, transform .2s ease;
+            }
+            .grid:hover .cell:hover {
+            	opacity: 1;
+            }
+            .cell:hover .cellhint {
+            	opacity: 1;
+            	transform: translate(0, -1rem);
+            }
+            .blah {
+            	position: relative;
+            	/*background: rgba(30,24,178,.8);*/
+            }
+            .blah .chapter {
+            	font-size: 3rem;
+            	font-weight: 500;
+            	margin: 2rem 0 2rem 0;
+            	transform: translate(0, -2rem);
+            	opacity: 0;
+            	transition: transform .4s ease, opacity .4s ease;
+            }
+            .blah .statline {
+            	display: flex;
+            	opacity: 0;
+            	transform: translate(0, -2rem);
+            	transition: transform .4s .1s ease, opacity .4s .1s ease;
+            	margin: 0 0 4rem 0;
+            }
+            .blah .statline div {
+            	margin: 0 2rem 0 0;
+            }
+            .blah .statline div div {
+            	font-size: 2rem;
+            	font-weight: 600;
+            }
+            .blah .statline div p {
+            	margin: 0;
+            }
+            .blah .statline .progressbar {
+            	position: absolute;
+            	width: 100%;
+            	height: 4px;
+            	background: #F4F2ED;
+            	top: -1.2rem;
+            }
+            .blah .statline .progressbar div {
+            	position: absolute;
+            	left: 0;
+            	top: 0;
+            	width: 0%;
+            	height: 100%;
+            	transition: width .5s .9s ease-in;
+            	background: #FEDC32;
+            }
+            .blah .statline .progressbar .progress {
+            	transition: width 1s 1s ease-in;
+            	background: #4E8FFF;
+            }
+            @keyframes pulse {
+            	0% {transform: scale(.9)}
+            	20% {transform: scale(1.1)}
+            	100% {transform: scale(.9)}
+            }
+            .button {
+            	display: inline-block;
+            	position: fixed;
+            	width: 4rem;
+            	height: 4rem;
+            	bottom: 5vh;
+            	right: 5vh;
+            	background: #000 url(gogogo.svg) no-repeat;
+            	background-position: 50%;
+            	background-size: 60%;
+            	border-radius: 50%;
+            	cursor: pointer;
+            	transform: translate(0, 2rem);
+            	opacity: 0;
+            	transition: transform .4s .2s ease, opacity .4s .2s ease;
+            	animation: pulse 1.6s infinite;
+            }
+            .button:hover {
+            	background-color: #222;
+            	animation: none;
+            	transform: scale(1.2) !important;
+            }
+            .b_mobile:hover {
+            	animation: pulse 1.6s infinite;
+            }
+            .button .hint{
+            	position: absolute;
+            	margin-top: 1.1rem;
+            	left: -4rem;
+            	width: 3.4rem;
+            	height: 1.71rem;
+            	background: url(enter.svg);
+            	background-size: 100%;
+            }
+            .help {
+            	position: absolute;
+            	width: 30%;
+            	/*height: calc(100% - 10rem);*/
+                  height: auto;
+            	top: 1rem;
+            	left: 1rem;
+            	background: rgba(254,220,50,.98) url(q.svg) no-repeat;
+            	background-position: .3rem .2rem;
+            	background-size: .45rem;
+            	padding: 3rem;
+            	border-radius: .5rem;
+            	font-size: 1.2rem;
+            	line-height: 1.8rem;
+            	transition: width .3s ease, height .3s ease, padding .3s ease, background-color 2s ease;
+            	overflow: hidden;
+            }
+            .help h1 {
+            	margin: 1rem 0 3rem 0;
+            }
+            .help h2 {
+                  font-size: 1.4rem;
+                  margin: 3rem 0 1rem 0;
+                  color: #3a43b7;
+            }
+            .help ul {
+                  padding: 0 0 0 1rem;
+                  color: #3a43b7;
+            }
+            .help li {
+                  list-style-type: none;
+            }
+            .help li:before {
+                  content: "—";
+                  position: relative;
+                  left: -1rem;
+            }
+            .help * {
+            	opacity: 1;
+            	transition: opacity .2s .3s ease;
+            }
+            .help p {
+            	margin: 0 0 1.6rem 0;
+            }
+            .closehelp {
+            	display: inline-block;
+            	position: relative;
+            	color: #FFF;
+            	margin-top: 4rem;
+            	font-size: .8rem;
+            	font-weight: 700;
+            	letter-spacing: .04rem;
+            	background: #000;
+            	border-radius: 4rem 4rem;
+            	padding: .6rem 2rem;
+            	cursor: pointer;
+            }
+            .closehelp .hint{
+            	position: absolute;
+            	margin-top: -1.7rem;
+            	right: -4rem;
+            	width: 3.4rem;
+            	height: 1.75rem;
+            	background: url(escape.svg);
+            	background-size: 100%;
+            }
+            .closed {
+            	width: 1rem;
+            	height: 1rem;
+            	padding: 0;
+            	background-color: #EFEFEF;
+            	/*background-position: .3rem .2rem;*/
+            	/*background-size: .45rem;*/
+            	cursor: pointer;
+            	overflow: hidden;
+            }
+            .closed * {
+            	opacity: 0;
+            	transition: opacity .2s ease;
+            }
+            .problem {
+            	position: absolute;
+            	top:0;
+            	left:0;
+            	display: flex;
+            	justify-content: center;
+            	align-items: center;
+            	width: 100%;
+            	height: 100%;
+            	font-size: 6rem;
+            	font-weight: 500;
+            	transform: translate(0,3rem) scale(.8);
+            	opacity: 0;
+            	transition: transform 2s cubic-bezier(0.075, 0.82, 0.165, 1), opacity 1s ease;
+            }
+            .vanity {
+            	width: 100%;
+            	opacity: 0;
+            	transform: translate(0, -2rem);
+            	transition: transform .4s .2s ease, opacity .4s .2s ease;
+            }
+            .vanity .prize {
+            	display: inline-flex;
+            	position: relative;
+            	justify-content: center;
+            	align-items: center;
+            	width: 4rem;
+            	height: 4rem;
+            	border-radius: 50%;
+            	background: #F4F2ED;
+            	margin: 0 1rem 1rem 0;
+            }
+            .vanity .prize div{
+            	position: absolute;
+            	left: -3rem;
+            	top: -3rem;
+            	width: 8rem;
+            	/*height: 9rem;*/
+            	padding: 1rem 1rem;
+            	background: #FFF;
+            	border-radius: .5rem;
+            	box-shadow: 0 .2rem 1rem 0 rgba(0,0,78,.1);
+            	pointer-events: none;
+            	z-index: 1;
+            	opacity: 0;
+            	transition: opacity .2s ease;
+            }
+            .vanity .prize div h1 {
+            	font-size: 1rem;
+            	line-height: 1rem;
+            	text-align: center;
+            	margin: 9rem 0 .6rem 0;
+            }
+            .vanity .prize div p {
+            	font-size: .6rem;
+            	text-align: center;
+            	margin: 0;
+            }
+            .vanity .prize:hover div{
+            	opacity: 1;
+            	z-index: 3;
+            }
+            .vanity .prize:hover img{
+            	z-index: 4;
+            }
+            .vanity .prize img {
+            	width: 100%;
+            	height: 100%;
+            	transform: scale(4);
+            	opacity: 0;
+            	transition: transform 1.2s cubic-bezier(0.075, 0.82, 0.165, 1), opacity 1.6s cubic-bezier(0.075, 0.82, 0.165, 1);
+            	z-index: 2;
+            	pointer-events: none;
+            }
+            .vanity .locked {
+            	color: #C9C6BD;
+            }
+            .vanity .locked img{
+            	transform: scale(1.3);
+            	opacity: 1;
+            }
+            .vanity .unlocked img{
+            	transform: scale(1.3);
+            	opacity: 1;
+            }
+            .vanity .unlocked div {
+            	
+            }
+            .vanity .prize:hover img{
+            	transition: transform .2s 0s ease !important;
+            	transform:scale(2.5);
+            }
+            @media all and (orientation:landscape){
+            	/*body {overflow: hidden}*/
+            	.gridWrap {
+            		justify-content: center;
+            		align-items: center;
+            		width: 50vw;
+            		height: 100vh;
+            		left: 50vw;
+            		top: 0;
+            	}
+            	.blah {
+            		width: 30%;
+            		margin-top: 10vh;
+            		margin-left: 10vw;
+            	}
+            }
+            @media all and (orientation:portrait){
+            	body, html {font-size: 2vh}
+            	.gridWrap {
+            		position: relative;
+            		justify-content: center;
+            		width: 100%;
+            		/*height: 50%;*/
+            		left: 0;
+            		top: 0;
+            	}
+            	.grid {
+	            	width: 80vw !important;
+	            	height: 80vw !important;
+	            	margin-bottom: 40%;
+	            }
+            	.blah {
+            		position: relative;
+            		width: 80%;
+            		top: 0;
+            		left: 0;
+            		margin: 10% 0 10% 10%;
+            	}
+            	.help {
+            		width: 60%;
+            	}
+            	.closed {
+            		width: 1rem;
+            	}
+            	.problem {
+	            	height: 60%;
+	            	font-size: 12vw;
+            	}
+            }
+            .bodyShadow{
+            	background: #262222 url(shadowback.png);
+            }
+            .shadow {
+            	background: #262222 url(shadowback.png);
+            }
+            .shadow .chapter, .shadow .statline {
+            	color: #FFF;
+            }
+            .shadow .blah .statline .progressbar {
+            	background: #000;
+            }
+            .shadow .blah .statline .progressbar div {
+            	background: #f54f5e;
+            }
+            .shadow .blah .statline .progressbar .progress {
+            	background: #f5ab4f;
+            }
+            .shadow .button {
+            	background-color: #f5ab4f;
+            }
+            .shadow .closed {
+            	background-color: #4c4840;
+            }
+            .shadow .problem {
+            	color: #FFF;
+            }
+            .shadow .prize {
+            	background-color: #4c4840;
+            }
+            .shadow .cellar {
+            	color: #4c4840;
+            }
+
+            .bodyVivid {
+            	background: #ffd864;
+            }
+            .vivid {
+            	background: #ffd864;
+            }
+            .vivid .chapter, .vivid .statline {
+            	color: #30323a;
+            }
+            .vivid .blah .statline .progressbar {
+            	background: #d4ba5c;
+            }
+            .vivid .blah .statline .progressbar div {
+            	background: #FFF;
+            }
+            .vivid .blah .statline .progressbar .progress {
+            	background: #000;
+            }
+            .vivid .button {
+            	background-color: #30323a;
+            }
+            .vivid .closed {
+            	background-color: #fff;
+            }
+            .vivid .problem {
+            	color: #30323a;
+            }
+            .vivid .prize {
+            	background-color: #fff;
+            }
+            .vivid .cellar {
+            	color: #3c589e;
+            }
+            .numpad {
+            	display: block;
+            	position: absolute;
+            	top:-300px;
+            	width:1px;
+            	height:1px;
+            	opacity: 0;
+            	font-size: 16px;
+            	pointer-events: none;
+            }
+            .numpad:focus{
+            	font-size: 16px;
+            }
